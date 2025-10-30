@@ -47,7 +47,8 @@ const CustomerDashboard = () => {
           *,
           queue_entries!queue_entries_shop_id_fkey(count)
         `)
-        .eq("is_open", true);
+        .eq("is_open", true)
+        .eq("queue_entries.status", "waiting");
 
       if (error) throw error;
 
@@ -75,16 +76,28 @@ const CustomerDashboard = () => {
 
       const { data, error } = await supabase
         .from("queue_entries")
-        .select(`
-          *,
-          barber_shops(name)
-        `)
+        .select("*")
         .eq("customer_id", user.id)
         .in("status", ["waiting", "in_service"])
-        .single();
+        .maybeSingle();
 
-      if (error && error.code !== "PGRST116") throw error;
-      setMyQueue(data);
+      if (error) throw error;
+
+      if (data) {
+        // Fetch shop name separately
+        const { data: shopData } = await supabase
+          .from("barber_shops")
+          .select("name")
+          .eq("id", data.shop_id)
+          .single();
+
+        setMyQueue({
+          ...data,
+          barber_shops: shopData || { name: "Unknown Shop" }
+        });
+      } else {
+        setMyQueue(null);
+      }
     } catch (error: any) {
       console.error("Error fetching queue:", error);
     }
@@ -157,6 +170,8 @@ const CustomerDashboard = () => {
       });
 
       setMyQueue(null);
+      // Refresh shops to immediately reflect new queue size/wait time
+      fetchShops();
     } catch (error: any) {
       toast({
         title: "Error",

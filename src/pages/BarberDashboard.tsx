@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Scissors, LogOut, Users, Clock, DollarSign, TrendingUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
-
+import ShopSetup from "@/pages/ShopSetup";
 type QueueEntry = {
   id: string;
   position: number;
@@ -22,6 +22,7 @@ const BarberDashboard = () => {
   const { toast } = useToast();
   const [shop, setShop] = useState<any>(null);
   const [queue, setQueue] = useState<QueueEntry[]>([]);
+  const [currentService, setCurrentService] = useState<QueueEntry | null>(null);
   const [analytics, setAnalytics] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -60,7 +61,7 @@ const BarberDashboard = () => {
 
       setShop(shopData);
 
-      // Get queue
+      // Get queue (waiting only)
       const { data: queueData, error: queueError } = await supabase
         .from("queue_entries")
         .select(`
@@ -73,6 +74,22 @@ const BarberDashboard = () => {
 
       if (queueError) throw queueError;
       setQueue(queueData || []);
+
+      // Get current in-service entry (if any)
+      const { data: inService, error: inServiceError } = await supabase
+        .from("queue_entries")
+        .select(`
+          *,
+          profiles(full_name)
+        `)
+        .eq("shop_id", shopData.id)
+        .eq("status", "in_service")
+        .order("called_at", { ascending: true })
+        .limit(1)
+        .maybeSingle();
+
+      if (inServiceError && inServiceError.code !== "PGRST116") throw inServiceError;
+      setCurrentService(inService ?? null);
 
       // Get today's analytics
       const today = new Date().toISOString().split("T")[0];
@@ -136,6 +153,8 @@ const BarberDashboard = () => {
         title: "Customer called",
         description: `${nextCustomer.profiles.full_name} is now being served`,
       });
+      // Refresh to update waiting list and current service
+      fetchShopData();
     } catch (error: any) {
       toast({
         title: "Error",
@@ -161,6 +180,8 @@ const BarberDashboard = () => {
         title: "Service completed",
         description: "Customer marked as done",
       });
+      // Refresh to pull next in-service (if any) and recompute positions
+      fetchShopData();
     } catch (error: any) {
       toast({
         title: "Error",
@@ -210,18 +231,8 @@ const BarberDashboard = () => {
   }
 
   if (!shop) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted">
-        <Card className="w-full max-w-md p-8 text-center">
-          <Scissors className="h-16 w-16 mx-auto mb-4 text-accent" />
-          <h2 className="text-2xl font-bold mb-2">Welcome to BarberQueue!</h2>
-          <p className="text-muted-foreground mb-6">
-            You need to set up your barber shop first. Please contact support to create your shop profile.
-          </p>
-          <Button onClick={handleSignOut}>Sign Out</Button>
-        </Card>
-      </div>
-    );
+  navigate("/barber/setup");
+  return null;
   }
 
   return (
@@ -353,17 +364,37 @@ const BarberDashboard = () => {
                         </p>
                       </div>
                     </div>
-                    {index === 0 && (
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => completeService(entry.id)}
-                      >
-                        Complete
-                      </Button>
-                    )}
                   </div>
                 ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Current In-Service */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>In Service Now</CardTitle>
+                <CardDescription>
+                  The customer currently being served
+                </CardDescription>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            {!currentService ? (
+              <div className="text-sm text-muted-foreground">No customer in service</div>
+            ) : (
+              <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
+                <div>
+                  <p className="font-semibold">{currentService.profiles.full_name}</p>
+                  <p className="text-sm text-muted-foreground">Started: {new Date(currentService.called_at as any).toLocaleTimeString()}</p>
+                </div>
+                <Button size="sm" variant="outline" onClick={() => completeService(currentService.id)}>
+                  Complete
+                </Button>
               </div>
             )}
           </CardContent>

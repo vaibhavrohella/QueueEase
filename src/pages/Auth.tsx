@@ -51,7 +51,7 @@ const Auth = () => {
             full_name: fullName,
             role: role,
           },
-          emailRedirectTo: `${window.location.origin}/`,
+          // emailRedirectTo omitted to avoid redirect URL misconfiguration during password signup
         },
       });
 
