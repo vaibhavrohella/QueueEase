@@ -13,7 +13,7 @@ const Landing = () => {
           <div className="flex items-center gap-2">
             <Scissors className="h-8 w-8 text-accent" />
             <span className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              BarberQueue
+              SaloonQueue
             </span>
           </div>
           <div className="flex gap-3">
@@ -36,7 +36,7 @@ const Landing = () => {
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-            Find Barbers,
+            Find Saloons,
             <br />
             <span className="bg-gradient-to-r from-accent via-warning to-accent bg-clip-text text-transparent">
               Track Queues
@@ -44,7 +44,7 @@ const Landing = () => {
           </h1>
           
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Discover nearby barber shops, check real-time queue status, and plan your visit perfectly. 
+            Discover nearby saloon shops, check real-time queue status, and plan your visit perfectly. 
             No more waiting in uncertainty.
           </p>
           
@@ -54,7 +54,7 @@ const Landing = () => {
               className="text-lg px-8"
               onClick={() => navigate("/auth?mode=signup&role=customer")}
             >
-              Find a Barber
+              Find a Saloon
             </Button>
             <Button 
               size="lg" 
@@ -62,7 +62,7 @@ const Landing = () => {
               className="text-lg px-8"
               onClick={() => navigate("/auth?mode=signup&role=barber")}
             >
-              I'm a Barber
+              I'm a Saloon Owner
             </Button>
           </div>
         </div>
@@ -74,7 +74,7 @@ const Landing = () => {
           <FeatureCard
             icon={<MapPin className="h-8 w-8 text-accent" />}
             title="Find Nearby"
-            description="Discover barber shops in your area with real-time availability"
+            description="Discover saloon shops in your area with real-time availability"
           />
           <FeatureCard
             icon={<Clock className="h-8 w-8 text-accent" />}
@@ -89,7 +89,7 @@ const Landing = () => {
           <FeatureCard
             icon={<BarChart3 className="h-8 w-8 text-accent" />}
             title="Analytics"
-            description="Barbers track performance and optimize their business"
+            description="Saloon owners track performance and optimize their business"
           />
         </div>
       </section>
@@ -99,7 +99,7 @@ const Landing = () => {
         <div className="bg-gradient-to-r from-primary to-primary/80 rounded-3xl p-12 text-center text-primary-foreground shadow-lg">
           <h2 className="text-4xl font-bold mb-4">Ready to skip the wait?</h2>
           <p className="text-xl mb-8 opacity-90">
-            Join thousands of happy customers and barbers
+            Join thousands of happy customers and saloon owners
           </p>
           <Button 
             size="lg" 
@@ -115,7 +115,7 @@ const Landing = () => {
       {/* Footer */}
       <footer className="border-t py-8">
         <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>&copy; 2024 BarberQueue. Making barber visits better.</p>
+          <p>&copy; 2024 SaloonQueue. Making saloon visits better.</p>
         </div>
       </footer>
     </div>

@@ -12,6 +12,7 @@ type QueueEntry = {
   position: number;
   estimated_wait_time: number;
   status: string;
+  called_at?: string;
   profiles: {
     full_name: string;
   };
@@ -25,6 +26,7 @@ const BarberDashboard = () => {
   const [currentService, setCurrentService] = useState<QueueEntry | null>(null);
   const [analytics, setAnalytics] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [updatingLocation, setUpdatingLocation] = useState(false);
 
   useEffect(() => {
     checkAuth();
@@ -93,14 +95,17 @@ const BarberDashboard = () => {
 
       // Get today's analytics
       const today = new Date().toISOString().split("T")[0];
-      const { data: analyticsData } = await supabase
+      const { data: analyticsData, error: analyticsError } = await supabase
         .from("shop_analytics")
         .select("*")
         .eq("shop_id", shopData.id)
         .eq("date", today)
-        .single();
+        .maybeSingle();
 
-      setAnalytics(analyticsData);
+      if (analyticsError && analyticsError.code !== "PGRST116") {
+        throw analyticsError;
+      }
+      setAnalytics(analyticsData ?? null);
     } catch (error: any) {
       toast({
         title: "Error",
@@ -109,6 +114,32 @@ const BarberDashboard = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateCurrentLocation = async () => {
+    if (!shop || !("geolocation" in navigator)) {
+      toast({ title: "Geolocation unavailable", description: "Cannot access device location.", variant: "destructive" });
+      return;
+    }
+    setUpdatingLocation(true);
+    try {
+      const pos = await new Promise<GeolocationPosition>((resolve, reject) =>
+        navigator.geolocation.getCurrentPosition(resolve, reject, { enableHighAccuracy: true, timeout: 10000 })
+      );
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      const { error } = await supabase
+        .from("barber_shops")
+        .update({ latitude: lat, longitude: lng })
+        .eq("id", shop.id);
+      if (error) throw error;
+      setShop({ ...shop, latitude: lat, longitude: lng });
+      toast({ title: "Location updated", description: "Customers will see your latest location." });
+    } catch (err: any) {
+      toast({ title: "Failed to update location", description: err.message || String(err), variant: "destructive" });
+    } finally {
+      setUpdatingLocation(false);
     }
   };
 
@@ -244,7 +275,7 @@ const BarberDashboard = () => {
             <Scissors className="h-6 w-6 text-accent" />
             <div>
               <span className="text-xl font-bold block">{shop.name}</span>
-              <span className="text-xs text-muted-foreground">Barber Dashboard</span>
+              <span className="text-xs text-muted-foreground">Saloon Dashboard</span>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -254,6 +285,9 @@ const BarberDashboard = () => {
               onClick={toggleShopStatus}
             >
               {shop.is_open ? "Open" : "Closed"}
+            </Button>
+            <Button variant="outline" size="sm" onClick={updateCurrentLocation} disabled={updatingLocation}>
+              {updatingLocation ? "Updating..." : "Update My Location"}
             </Button>
             <Button variant="ghost" size="sm" onClick={handleSignOut}>
               <LogOut className="h-4 w-4 mr-2" />

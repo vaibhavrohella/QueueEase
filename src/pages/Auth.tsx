@@ -59,7 +59,7 @@ const Auth = () => {
 
       toast({
         title: "Account created!",
-        description: "Welcome to BarberQueue. Redirecting...",
+        description: "Welcome to SaloonQueue. Redirecting...",
       });
 
       if (data.session) {
@@ -112,7 +112,7 @@ const Auth = () => {
           <div className="flex justify-center mb-4">
             <Scissors className="h-12 w-12 text-accent" />
           </div>
-          <CardTitle className="text-3xl">Welcome to BarberQueue</CardTitle>
+          <CardTitle className="text-3xl">Welcome to SaloonQueue</CardTitle>
           <CardDescription>Sign in or create your account</CardDescription>
         </CardHeader>
         <CardContent>
@@ -205,7 +205,7 @@ const Auth = () => {
                       onClick={() => setRole("barber")}
                       className="w-full"
                     >
-                      Barber
+                      Saloon Owner
                     </Button>
                   </div>
                 </div>
