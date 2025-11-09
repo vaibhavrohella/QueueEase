@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { MapPin, Clock, Users, Scissors, LogOut } from "lucide-react";
+import { MapPin, Clock, Users, LogOut } from "lucide-react";
+import QueueEaseLogo from "@/components/QueueEaseLogo";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import MapView from "@/components/MapView";
@@ -236,10 +237,7 @@ const CustomerDashboard = () => {
       {/* Header */}
       <header className="border-b bg-card/50 backdrop-blur sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Scissors className="h-6 w-6 text-accent" />
-            <span className="text-xl font-bold">SaloonQueue</span>
-          </div>
+          <QueueEaseLogo size={28} variant="full" />
           <Button variant="ghost" size="sm" onClick={handleSignOut}>
             <LogOut className="h-4 w-4 mr-2" />
             Sign Out

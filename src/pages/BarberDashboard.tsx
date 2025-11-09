@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Scissors, LogOut, Users, Clock, DollarSign, TrendingUp } from "lucide-react";
+import { LogOut, Users, Clock, DollarSign, TrendingUp } from "lucide-react";
+import QueueEaseLogo from "@/components/QueueEaseLogo";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import ShopSetup from "@/pages/ShopSetup";
@@ -271,11 +272,11 @@ const BarberDashboard = () => {
       {/* Header */}
       <header className="border-b bg-card/50 backdrop-blur sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Scissors className="h-6 w-6 text-accent" />
+          <div className="flex items-center gap-3">
+            <QueueEaseLogo size={32} className="text-accent" />
             <div>
               <span className="text-xl font-bold block">{shop.name}</span>
-              <span className="text-xs text-muted-foreground">Saloon Dashboard</span>
+              <span className="text-xs text-muted-foreground">QueueEase Dashboard</span>
             </div>
           </div>
           <div className="flex items-center gap-3">

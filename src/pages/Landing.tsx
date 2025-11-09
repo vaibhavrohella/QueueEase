@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Scissors, Clock, MapPin, BarChart3 } from "lucide-react";
+import { Clock, MapPin, BarChart3 } from "lucide-react";
+import QueueEaseLogo from "@/components/QueueEaseLogo";
 
 const Landing = () => {
   const navigate = useNavigate();
@@ -10,12 +11,7 @@ const Landing = () => {
       {/* Header */}
       <header className="border-b bg-card/50 backdrop-blur">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Scissors className="h-8 w-8 text-accent" />
-            <span className="text-2xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              SaloonQueue
-            </span>
-          </div>
+          <QueueEaseLogo size={40} variant="full" />
           <div className="flex gap-3">
             <Button variant="ghost" onClick={() => navigate("/auth")}>
               Sign In
@@ -82,7 +78,7 @@ const Landing = () => {
             description="See exact wait times and queue positions instantly"
           />
           <FeatureCard
-            icon={<Scissors className="h-8 w-8 text-accent" />}
+            icon={<QueueEaseLogo size={32} className="text-accent" />}
             title="Join Remotely"
             description="Reserve your spot from anywhere and arrive on time"
           />
@@ -115,7 +111,7 @@ const Landing = () => {
       {/* Footer */}
       <footer className="border-t py-8">
         <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>&copy; 2024 SaloonQueue. Making saloon visits better.</p>
+          <p>&copy; 2024 QueueEase. Making queue management effortless.</p>
         </div>
       </footer>
     </div>

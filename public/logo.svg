@@ -1,0 +1,34 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Smooth flowing queue lines representing ease and flow -->
+  <path
+    d="M12 32C12 32 16 28 20 32C24 36 28 32 32 32C36 32 40 36 44 32C48 28 52 32 52 32"
+    stroke="#3b82f6"
+    stroke-width="3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <!-- Additional flowing line for depth -->
+  <path
+    d="M12 40C12 40 16 36 20 40C24 44 28 40 32 40C36 40 40 44 44 40C48 36 52 40 52 40"
+    stroke="#8b5cf6"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    opacity="0.7"
+  />
+  <!-- Checkmark/checkpoint at the end representing completion/ease -->
+  <circle
+    cx="52"
+    cy="36"
+    r="4"
+    fill="#8b5cf6"
+  />
+  <path
+    d="M49 36L51 38L55 34"
+    stroke="white"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>
+

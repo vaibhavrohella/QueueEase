@@ -1,4 +1,6 @@
-# Welcome to your Lovable project
+# QueueEase
+
+**QueueEase** - Effortless queue management for businesses and customers.
 
 ## Project info
 

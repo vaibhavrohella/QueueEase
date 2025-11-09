@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Scissors } from "lucide-react";
+import QueueEaseLogo from "@/components/QueueEaseLogo";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -59,7 +59,7 @@ const Auth = () => {
 
       toast({
         title: "Account created!",
-        description: "Welcome to SaloonQueue. Redirecting...",
+        description: "Welcome to QueueEase. Redirecting...",
       });
 
       if (data.session) {
@@ -110,9 +110,9 @@ const Auth = () => {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
-            <Scissors className="h-12 w-12 text-accent" />
+            <QueueEaseLogo size={48} className="text-accent" />
           </div>
-          <CardTitle className="text-3xl">Welcome to SaloonQueue</CardTitle>
+          <CardTitle className="text-3xl">Welcome to QueueEase</CardTitle>
           <CardDescription>Sign in or create your account</CardDescription>
         </CardHeader>
         <CardContent>
